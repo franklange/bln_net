@@ -1,31 +1,28 @@
-#include <bln_net/udp_socket_asio.hpp>
+#include <bln_net/local_socket_asio.hpp>
 
-namespace bln_net::udp {
+#include <unistd.h>
+
+namespace bln_net::local {
+
+using dgram = boost::asio::local::datagram_protocol;
 
 namespace {
 
-template <typename E>
-auto to_boost(E&& e) -> ip::udp::endpoint
+auto make_socket(io_context& c, dgram::endpoint& p) -> dgram::socket
 {
-    return {ip::address::from_string(std::forward<E>(e).addr), e.port};
-}
-
-auto from_boost(const ip::udp::endpoint& e) -> endpoint
-{
-    return {e.address().to_string(), e.port()};
+    ::unlink(p.path().c_str());
+    return {c, p};
 }
 
 } // namespace anonym
 
-socket_asio::socket_asio(const u16 rx, const u16 bufSize, const u16 queueSize)
+socket_asio::socket_asio(const std::string& p, const u16 bufSize, const u16 queueSize)
     : m_queue{queueSize}
+    , m_buffer(bufSize)
+    , m_path{p}
+    , m_socket{make_socket(m_io, m_path)}
     , m_reader{&socket_asio::read, this}
-{
-    m_buffer.resize(bufSize);
-
-    m_socket.set_option(ip::udp::socket::reuse_address(true));
-    m_socket.bind({ip::udp::v4(), rx});
-}
+{}
 
 socket_asio::~socket_asio()
 {
@@ -33,18 +30,20 @@ socket_asio::~socket_asio()
 
     if (m_reader.joinable())
         m_reader.join();
+
+    ::unlink(m_path.path().c_str());
 }
 
 auto socket_asio::put(packet&& p) -> u32
 {
     const spinlock l{m_txlock};
-    return m_socket.send_to(buffer(std::move(p.data)), to_boost(std::move(p.remote)));
+    return m_socket.send_to(buffer(std::move(p.data)), {std::move(p.remote)});
 }
 
 auto socket_asio::put(const packet& p) -> u32
 {
     const spinlock l{m_txlock};
-    return m_socket.send_to(buffer(p.data), to_boost(p.remote));
+    return m_socket.send_to(buffer(p.data), {p.remote});
 }
 
 auto socket_asio::get() -> std::optional<packet>
@@ -60,11 +59,6 @@ auto socket_asio::wait() -> packet
 auto socket_asio::wait(const timeout& t) -> std::optional<packet>
 {
     return m_queue.wait(t);
-}
-
-auto socket_asio::port() const -> u16
-{
-    return m_socket.local_endpoint().port();
 }
 
 void socket_asio::read()
@@ -86,8 +80,8 @@ void socket_asio::handle_read(const error e, const u32 n)
     if (e || !n)
         return;
 
-    m_queue.put({from_boost(m_sender), bytes{m_buffer.begin(), m_buffer.begin() + n}});
+    m_queue.put({m_sender.path(), bytes{m_buffer.begin(), m_buffer.begin() + n}});
     listen();
 }
 
-} // namespace bln_net::udp
+} // namespace bln_net::local
