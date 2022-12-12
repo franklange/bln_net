@@ -1,44 +1,23 @@
 project(bln_net_udp_test)
 
-set(ECHO_CLI_TARGET echo_client)
-add_executable(${ECHO_CLI_TARGET} echo_client.cpp client.cpp)
+# Server
+set(SRV_TARGET udp_server_TEST)
+add_executable(${SRV_TARGET} server_TEST.cpp)
 
-set_target_properties(${ECHO_CLI_TARGET} PROPERTIES
+set_target_properties(${SRV_TARGET} PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/tests"
 )
 
-target_link_libraries(${ECHO_CLI_TARGET} PRIVATE bln_net)
+target_link_libraries(${SRV_TARGET} PRIVATE bln_net)
+target_compile_features(${SRV_TARGET} PUBLIC cxx_std_20)
 
+# Client
+set(CLI_TARGET udp_client_TEST)
+add_executable(${CLI_TARGET} client_TEST.cpp)
 
-set(ECHO_SRV_TARGET echo_server)
-add_executable(${ECHO_SRV_TARGET} echo_server.cpp server.cpp)
-
-set_target_properties(${ECHO_SRV_TARGET} PROPERTIES
+set_target_properties(${CLI_TARGET} PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/tests"
 )
 
-target_link_libraries(${ECHO_SRV_TARGET} PRIVATE
-    bln_net
-)
-
-
-set(ECHO_TESTS echo_tests)
-add_executable(${ECHO_TESTS} "")
-
-set_target_properties(${ECHO_TESTS} PROPERTIES
-    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/tests"
-)
-
-target_sources(${ECHO_TESTS} PRIVATE
-    client_TEST.cpp
-    server_TEST.cpp
-    client.hpp client.cpp
-    server.hpp server.cpp
-)
-
-target_link_libraries(${ECHO_TESTS} PRIVATE
-    bln_net
-    GTest::gmock_main
-)
-
-gtest_discover_tests(${ECHO_TESTS})
+target_link_libraries(${CLI_TARGET} PRIVATE bln_net)
+target_compile_features(${CLI_TARGET} PUBLIC cxx_std_20)

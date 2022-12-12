@@ -28,9 +28,10 @@ target_sources(${PROJECT_NAME} PRIVATE
     include/bln_net/udp_socket_asio.hpp
 
     src/utils.cpp
-    src/local_socket_asio.cpp
     src/local_packet.cpp
+    src/local_socket_asio.cpp
     src/udp_endpoint.cpp
+    src/udp_packet.cpp
     src/udp_socket_asio.cpp
 )
 
@@ -43,6 +44,9 @@ target_link_libraries(${PROJECT_NAME} PUBLIC
 )
 
 if (BLN_NET_TESTS)
-    enable_testing()
     add_subdirectory(test)
+endif()
+
+if (BLN_NET_EXAMPLES)
+    add_subdirectory(example)
 endif()

@@ -1,6 +1,6 @@
-#include <bln_net/local_packet.hpp>
+#include <bln_net/udp_packet.hpp>
 
-namespace bln_net::local {
+namespace bln_net::udp {
 
 auto packet::to_string() const -> std::string
 {
@@ -8,7 +8,7 @@ auto packet::to_string() const -> std::string
     res.reserve(32);
 
     res += "[";
-    res += remote;
+    res += remote.to_string();
     res += "|b'";
     res += std::to_string(data.size());
     res += "]";
@@ -16,4 +16,4 @@ auto packet::to_string() const -> std::string
     return res;
 }
 
-} // namespace bln_net::local
+} // namespace bln_net::udp

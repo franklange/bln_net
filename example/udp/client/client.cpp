@@ -11,6 +11,6 @@ void client::echo(const std::string& s)
     m_socket.put({m_server, bln_net::to_bytes(s)});
     std::cout << "[tx] " << s << std::endl;
 
-    const auto [_, reply] = m_socket.wait();
-    std::cout << "[rx] " << bln_net::to_string(reply) << std::endl;
+    const auto p = m_socket.wait();
+    std::cout << "[rx] " << p.to_string() << std::endl;
 }

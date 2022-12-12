@@ -1,23 +1,19 @@
-#include "client.hpp"
+#include <bln_net/udp_socket_asio.hpp>
+#include <bln_net/utils.hpp>
 
-#include <bln_net/udp_socket_MOCK.hpp>
+#include <iostream>
 
-#include <gtest/gtest.h>
-
-namespace bln_net::udp::test {
-
-struct client_test : public ::testing::Test
+auto main() -> int
 {
-    socket_MOCK m_socket;
-    client m_client{m_socket};
-};
+    bln_net::udp::socket_asio s{9000};
 
-TEST_F(client_test, echo)
-{
-    EXPECT_CALL(m_socket, put_rv).Times(1);
-    EXPECT_CALL(m_socket, wait()).Times(1);
+    const std::string msg{"hi"};
 
-    m_client.echo("hi");
+    s.put({{"127.0.0.1", 8000}, bln_net::to_bytes(msg)});
+    std::cout << "tx: " << msg << std::endl;
+
+    const auto p = s.wait();
+    std::cout << "rx: " << p.to_string() << std::endl;
+
+    return 0;
 }
-
-} // namespace bln_net::udp::test
