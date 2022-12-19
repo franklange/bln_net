@@ -18,8 +18,10 @@ struct socket_MOCK : public socket
 
     MOCK_METHOD(packet, wait, (), (override));
     MOCK_METHOD(std::optional<packet>, wait, (const timeout&), (override));
+    MOCK_METHOD(std::optional<packet>, measured_wait, (const timeout&), (override));
 
     MOCK_METHOD(u16, port, (), (const, override));
+    MOCK_METHOD(duration, last_wait, (), (const, override));
 };
 
 } // namespace bln_net::udp

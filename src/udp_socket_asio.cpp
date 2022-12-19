@@ -1,4 +1,5 @@
 #include <bln_net/udp_socket_asio.hpp>
+#include <bln_net/utils.hpp>
 
 namespace bln_net::udp {
 
@@ -62,9 +63,24 @@ auto socket_asio::wait(const timeout& t) -> std::optional<packet>
     return m_queue.wait(t);
 }
 
+auto socket_asio::measured_wait(const timeout& t) -> std::optional<packet>
+{
+    const auto s = clock::now();
+    const auto p = m_queue.wait(t);
+
+    m_lastwait = p ? to_duration(clock::now() - s) : t;
+
+    return p;
+}
+
 auto socket_asio::port() const -> u16
 {
     return m_socket.local_endpoint().port();
+}
+
+auto socket_asio::last_wait() const -> duration
+{
+    return m_lastwait;
 }
 
 void socket_asio::read()

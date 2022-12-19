@@ -21,8 +21,10 @@ struct socket
 
     virtual auto wait() -> packet = 0;
     virtual auto wait(const timeout&) -> std::optional<packet> = 0;
+    virtual auto measured_wait(const timeout&) -> std::optional<packet> = 0;
 
     virtual auto port() const -> u16 = 0;
+    virtual auto last_wait() const -> duration = 0;
 };
 
 } // namespace bln_net::udp

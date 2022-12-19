@@ -11,7 +11,7 @@ namespace bln_net {
 
 using namespace std::chrono_literals;
 
-using byte = std::uint8_t;
+using byte  = std::uint8_t;
 using bytes = std::vector<byte>;
 
 using error = boost::system::error_code;
@@ -19,6 +19,8 @@ using error = boost::system::error_code;
 using mutex = boost::fibers::mutex;
 using spinlock = std::lock_guard<mutex>;
 
+using clock = std::chrono::steady_clock;
 using timeout = std::chrono::microseconds;
+using duration = std::chrono::microseconds;
 
 } // namespace bln_net

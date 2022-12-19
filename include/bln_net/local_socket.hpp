@@ -1,6 +1,7 @@
 #pragma once
 
 #include <bln_net/local_packet.hpp>
+#include <bln_net/types.hpp>
 
 #include <cstdint>
 #include <optional>
@@ -20,6 +21,9 @@ struct socket
 
     virtual auto wait() -> packet = 0;
     virtual auto wait(const timeout&) -> std::optional<packet> = 0;
+    virtual auto measured_wait(const timeout&) -> std::optional<packet> = 0;
+
+    virtual auto last_wait() const -> duration = 0;
 };
 
 } // namespace bln_net::local

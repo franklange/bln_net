@@ -37,6 +37,9 @@ public:
 
     auto wait() -> packet override;
     auto wait(const timeout&) -> std::optional<packet> override;
+    auto measured_wait(const timeout&) -> std::optional<packet> override;
+
+    auto last_wait() const -> duration override;
 
 private:
     void read();
@@ -50,8 +53,9 @@ private:
 
     dgram::endpoint m_path;
     dgram::endpoint m_sender;
-
     dgram::socket m_socket;
+
+    duration m_lastwait{0};
 
     mutex m_txlock;
     std::thread m_reader;

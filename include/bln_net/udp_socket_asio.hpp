@@ -35,8 +35,10 @@ public:
 
     auto wait() -> packet override;
     auto wait(const timeout&) -> std::optional<packet> override;
+    auto measured_wait(const timeout&) -> std::optional<packet> override;
 
     auto port() const -> u16 override;
+    auto last_wait() const -> duration override;
 
 private:
     void read();
@@ -49,6 +51,8 @@ private:
     io_context m_io;
     ip::udp::socket m_socket{m_io, ip::udp::v4()};
     ip::udp::endpoint m_sender;
+
+    duration m_lastwait{0};
 
     mutex m_txlock;
     std::thread m_reader;
