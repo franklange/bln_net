@@ -99,7 +99,7 @@ void socket_asio::listen()
 
 void socket_asio::handle_read(const error e, const u32 n)
 {
-    if (e || !n)
+    if (e)
         return;
 
     m_queue.put({from_boost(m_sender), bytes{m_buffer.begin(), m_buffer.begin() + n}});
