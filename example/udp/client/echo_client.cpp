@@ -8,7 +8,7 @@ auto main() -> int
     bln_net::udp::socket_asio socket{9000};
 
     client c{socket};
-    c.echo("hi");
+    c.echo("");
 
     return 0;
 }

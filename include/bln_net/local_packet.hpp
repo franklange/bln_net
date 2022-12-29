@@ -9,7 +9,7 @@ namespace bln_net::local {
 
 struct packet
 {
-    endpoint remote;
+    endpoint remote{};
     bytes data;
 
     auto to_string() const -> std::string;

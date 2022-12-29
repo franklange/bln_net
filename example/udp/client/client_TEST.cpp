@@ -14,7 +14,7 @@ struct client_test : public ::testing::Test
 
 TEST_F(client_test, echo)
 {
-    EXPECT_CALL(m_socket, put_rv).Times(1);
+    EXPECT_CALL(m_socket, put).Times(1);
     EXPECT_CALL(m_socket, wait()).Times(1);
 
     m_client.echo("hi");

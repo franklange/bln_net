@@ -7,8 +7,11 @@ namespace bln_net::udp {
 
 struct endpoint
 {
+    endpoint() = default;
+    endpoint(std::string, std::uint16_t);
+
     std::string   addr;
-    std::uint16_t port;
+    std::uint16_t port{0};
 
     auto to_string() const -> std::string;
 

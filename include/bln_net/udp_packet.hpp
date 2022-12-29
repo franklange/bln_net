@@ -9,7 +9,7 @@ namespace bln_net::udp {
 
 struct packet
 {
-    endpoint remote;
+    endpoint remote{};
     bytes data;
 
     auto to_string() const -> std::string;

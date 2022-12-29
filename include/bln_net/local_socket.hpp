@@ -10,20 +10,16 @@ namespace bln_net::local {
 
 struct socket
 {
-    using u32 = std::uint32_t;
+    using u16 = std::uint16_t;
 
     virtual ~socket() = default;
 
-    virtual auto put(packet&&) -> u32 = 0;
-    virtual auto put(const packet&) -> u32 = 0;
+    virtual auto put(packet) -> u16 = 0;
 
     virtual auto get() -> std::optional<packet> = 0;
 
     virtual auto wait() -> packet = 0;
     virtual auto wait(const timeout&) -> std::optional<packet> = 0;
-    virtual auto measured_wait(const timeout&) -> std::optional<packet> = 0;
-
-    virtual auto last_wait() const -> duration = 0;
 };
 
 } // namespace bln_net::local

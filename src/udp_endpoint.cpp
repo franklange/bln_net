@@ -4,6 +4,11 @@
 
 namespace bln_net::udp {
 
+endpoint::endpoint(std::string a, uint16_t p)
+    : addr{a}
+    , port{p}
+{}
+
 auto endpoint::to_string() const -> std::string
 {
     return addr + ":" + std::to_string(port);

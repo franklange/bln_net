@@ -15,7 +15,7 @@ struct server_test : public ::testing::Test
 TEST_F(server_test, process)
 {
     EXPECT_CALL(m_socket, wait()).Times(1);
-    EXPECT_CALL(m_socket, put_rv).Times(1);
+    EXPECT_CALL(m_socket, put).Times(1);
 
     m_server.process_request();
 }

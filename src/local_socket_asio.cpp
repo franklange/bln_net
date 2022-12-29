@@ -35,16 +35,10 @@ socket_asio::~socket_asio()
     ::unlink(m_path.path().c_str());
 }
 
-auto socket_asio::put(packet&& p) -> u32
+auto socket_asio::put(packet p) -> u16
 {
     const spinlock l{m_txlock};
     return m_socket.send_to(buffer(std::move(p.data)), {std::move(p.remote)});
-}
-
-auto socket_asio::put(const packet& p) -> u32
-{
-    const spinlock l{m_txlock};
-    return m_socket.send_to(buffer(p.data), {p.remote});
 }
 
 auto socket_asio::get() -> std::optional<packet>
@@ -60,6 +54,16 @@ auto socket_asio::wait() -> packet
 auto socket_asio::wait(const timeout& t) -> std::optional<packet>
 {
     return m_queue.wait(t);
+}
+
+auto socket_asio::measured_wait() -> packet
+{
+    const auto s = clock::now();
+    const auto p = m_queue.wait();
+
+    m_lastwait = to_duration(clock::now() - s);
+
+    return p;
 }
 
 auto socket_asio::measured_wait(const timeout& t) -> std::optional<packet>
@@ -91,7 +95,7 @@ void socket_asio::listen()
     );
 }
 
-void socket_asio::handle_read(const error e, const u32 n)
+void socket_asio::handle_read(const error e, const u16 n)
 {
     if (e)
         return;
