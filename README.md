@@ -7,7 +7,7 @@ A small socket library.
 
 ### Server
 ```c++
-#include <bln_net/udp_socket_asio.hpp>
+#include <bln_net/udp.hpp>
 #include <iostream>
 
 auto main() -> int
@@ -29,7 +29,7 @@ auto main() -> int
 
 ### Client
 ```c++
-#include <bln_net/udp_socket_asio.hpp>
+#include <bln_net/udp.hpp>
 #include <bln_net/utils.hpp>
 
 auto main() -> int

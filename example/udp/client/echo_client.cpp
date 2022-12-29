@@ -1,6 +1,6 @@
 #include "client.hpp"
 
-#include <bln_net/udp_socket_asio.hpp>
+#include <bln_net/udp.hpp>
 #include <bln_net/utils.hpp>
 
 auto main() -> int

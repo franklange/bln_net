@@ -1,4 +1,4 @@
-#include <bln_net/udp_socket_hb_srv.hpp>
+#include <bln_net/udp.hpp>
 
 #include <iostream>
 
