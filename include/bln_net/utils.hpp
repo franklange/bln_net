@@ -3,13 +3,13 @@
 #include <bln_net/types.hpp>
 
 #include <chrono>
-#include <string>
+#include <string_view>
 #include <utility>
 
 namespace bln_net {
 
 auto to_string(const bln_net::bytes&) -> std::string;
-auto to_bytes(const std::string&) -> bln_net::bytes;
+auto to_bytes(std::string_view) -> bln_net::bytes;
 
 template <typename T>
 auto to_duration(T&& t) -> duration

@@ -26,7 +26,7 @@ class socket_asio : public socket
     using guard = executor_work_guard<io_context::executor_type>;
 
 public:
-    socket_asio(const std::string&, u16 bufSize = 1024, u16 queueSize = 32);
+    socket_asio(std::string, u16 bufSize = 1024, u16 queueSize = 32);
     ~socket_asio();
 
     auto put(packet) -> u16 override;

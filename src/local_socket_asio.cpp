@@ -17,10 +17,10 @@ auto make_socket(io_context& c, dgram::endpoint& p) -> dgram::socket
 
 } // namespace anonym
 
-socket_asio::socket_asio(const std::string& p, const u16 bufSize, const u16 queueSize)
+socket_asio::socket_asio(std::string p, const u16 bufSize, const u16 queueSize)
     : m_queue{queueSize}
     , m_buffer(bufSize)
-    , m_path{p}
+    , m_path{std::move(p)}
     , m_socket{make_socket(m_io, m_path)}
     , m_reader{&socket_asio::read, this}
 {}
