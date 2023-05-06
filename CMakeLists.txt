@@ -2,12 +2,12 @@ cmake_minimum_required(VERSION 3.10)
 project(bln_net)
 
 find_package(Threads REQUIRED)
-add_subdirectory(third_party/bln_queue)
+
+if (NOT TARGET bln_queue)
+    add_subdirectory(third_party/bln_queue)
+endif()
 
 option(BLN_NET_TESTS "Enable BLN Net Tests" OFF)
-
-
-add_compile_options(-Wall -Wextra -pedantic)
 
 add_library(${PROJECT_NAME} "")
 
@@ -45,6 +45,10 @@ target_sources(${PROJECT_NAME} PRIVATE
 
 target_include_directories(${PROJECT_NAME} PUBLIC include)
 target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_20)
+
+if (UNIX)
+    target_compile_options(${PROJECT_NAME} PUBLIC -Wall -Wextra -pedantic)
+endif (UNIX)
 
 target_link_libraries(${PROJECT_NAME} PUBLIC
     bln_queue
