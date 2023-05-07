@@ -18,9 +18,10 @@ struct endpoint
     auto operator<=>(const endpoint&) const = default;
 };
 
-struct ep_hash
-{
-    auto operator()(const endpoint& e) const -> std::size_t;
-};
-
 } // namespace bln_net::udp
+
+template<>
+struct std::hash<bln_net::udp::endpoint>
+{
+    auto operator()(const bln_net::udp::endpoint&) const -> std::size_t;
+};

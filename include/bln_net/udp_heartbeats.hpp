@@ -12,7 +12,7 @@ namespace bln_net::udp {
 class heartbeats
 {
     using u8 = std::uint16_t;
-    using beats = std::unordered_map<endpoint, u8, ep_hash>;
+    using beats = std::unordered_map<endpoint, u8>;
 
 public:
     void add (const endpoint&);

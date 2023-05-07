@@ -14,7 +14,9 @@ auto endpoint::to_string() const -> std::string
     return addr + ":" + std::to_string(port);
 }
 
-auto ep_hash::operator()(const endpoint& e) const -> std::size_t
+} // namespace bln_net::udp
+
+auto std::hash<bln_net::udp::endpoint>::operator()(const bln_net::udp::endpoint& e) const -> std::size_t
 {
     std::size_t h{0};
     boost::hash_combine(h, e.addr);
@@ -22,5 +24,3 @@ auto ep_hash::operator()(const endpoint& e) const -> std::size_t
 
     return h;
 }
-
-} // namespace bln_net::udp
