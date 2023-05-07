@@ -1,6 +1,6 @@
 #pragma once
 
-#include <bln_net/udp_heartbeats.hpp>
+#include <bln_net/heartbeats.hpp>
 #include <bln_net/udp_socket.hpp>
 #include <bln_net/udp_socket_asio.hpp>
 
@@ -17,6 +17,7 @@ class socket_hb_srv : public socket
     using u16 = std::uint16_t;
     using guard = executor_work_guard<io_context::executor_type>;
     using queue = bln_queue::msg_queue<packet>;
+    using beats = heartbeats<udp::endpoint>;
 
 public:
     socket_hb_srv(u16 rx, timeout t = 5s, u16 bufSize = 1024, u16 queueSize = 32);
@@ -39,7 +40,7 @@ private:
     socket_asio m_socket;
 
     queue m_packets;
-    heartbeats m_heartbeats;
+    beats m_heartbeats;
 
     std::thread m_rxthread;
     std::thread m_gcthread;
