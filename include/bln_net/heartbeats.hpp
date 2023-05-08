@@ -1,7 +1,6 @@
 #pragma once
 
 #include <bln_net/types.hpp>
-#include <bln_net/udp_endpoint.hpp>
 
 #include <cstdint>
 #include <vector>

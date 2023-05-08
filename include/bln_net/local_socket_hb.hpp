@@ -3,7 +3,9 @@
 #include <bln_net/heartbeats.hpp>
 #include <bln_net/local_socket.hpp>
 #include <bln_net/local_socket_asio.hpp>
+#include <bln_net/types.hpp>
 
+#include <atomic>
 #include <cstdint>
 #include <thread>
 
@@ -38,6 +40,9 @@ private:
 
     queue m_packets;
     beats m_heartbeats;
+
+    const timeout m_quit{500ms};
+    std::atomic_bool m_running{true};
 
     std::thread m_rxthread;
     std::thread m_txthread;

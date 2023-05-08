@@ -21,11 +21,13 @@ socket_hb::socket_hb(std::string p, timeout t, const u16 bufSize, const u16 queu
 
 socket_hb::~socket_hb()
 {
-//    if (m_rxthread.joinable())
-//        m_rxthread.join();
+    m_running = false;
 
-//    if (m_txthread.joinable())
-//        m_txthread.join();
+    if (m_rxthread.joinable())
+        m_rxthread.join();
+
+    if (m_txthread.joinable())
+        m_txthread.join();
 }
 
 auto socket_hb::put(packet p) -> u16
@@ -50,16 +52,19 @@ auto socket_hb::wait(const timeout& t) -> std::optional<packet>
 
 void socket_hb::recv()
 {
-    auto p = m_socket.wait();
+    auto p = m_socket.wait(m_quit);
 
-    if (is_heartbeat(p))
+    if (!p)
+        return;
+
+    if (is_heartbeat(*p))
     {
-        m_heartbeats.beat(p.remote);
+        m_heartbeats.beat(p->remote);
         return;
     }
 
-    m_heartbeats.add(p.remote);
-    m_packets.put(std::move(p));
+    m_heartbeats.add(p->remote);
+    m_packets.put(std::move(*p));
 }
 
 void socket_hb::pulsecheck()
@@ -81,13 +86,13 @@ void socket_hb::beat()
 
 void socket_hb::rxthread()
 {
-    while (true)
+    while (m_running)
         recv();
 }
 
 void socket_hb::txthread(const timeout t)
 {
-    while (true)
+    while (m_running)
     {
         std::this_thread::sleep_for(t);
         pulsecheck();
