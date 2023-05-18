@@ -24,6 +24,7 @@ target_sources(${PROJECT_NAME} PRIVATE
     include/bln_net/local_packet.hpp
     include/bln_net/local_socket.hpp
     include/bln_net/local_socket_asio.hpp
+    include/bln_net/local_socket_hb.hpp
 
     include/bln_net/udp_endpoint.hpp
     include/bln_net/udp_packet.hpp
@@ -32,14 +33,15 @@ target_sources(${PROJECT_NAME} PRIVATE
     include/bln_net/udp_socket_hb_srv.hpp
     include/bln_net/udp_socket_hb_cli.hpp
 
-    src/utils.cpp
     src/local_packet.cpp
     src/local_socket_asio.cpp
+    src/local_socket_hb.cpp
     src/udp_endpoint.cpp
     src/udp_packet.cpp
     src/udp_socket_asio.cpp    
     src/udp_socket_hb_cli.cpp
     src/udp_socket_hb_srv.cpp
+    src/utils.cpp
 )
 
 target_include_directories(${PROJECT_NAME} PUBLIC include)

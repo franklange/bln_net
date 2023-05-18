@@ -21,6 +21,7 @@ public:
     void trim(const std::vector<E>&);
 
     auto check() -> std::vector<E>;
+    auto alive() -> std::vector<E>;
 
 private:
     mutex m_mutex;
@@ -68,6 +69,18 @@ auto heartbeats<E>::check() -> std::vector<E>
 
     for (auto& [e, b] : m_heartbeats)
         if ((--b) == 0) res.push_back(e);
+
+    return res;
+}
+
+template <typename E>
+auto heartbeats<E>::alive() -> std::vector<E>
+{
+    const spinlock l{m_mutex};
+
+    std::vector<E> res;
+    for (const auto& [e, _] : m_heartbeats)
+        res.push_back(e);
 
     return res;
 }

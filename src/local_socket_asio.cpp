@@ -38,7 +38,11 @@ socket_asio::~socket_asio()
 auto socket_asio::put(packet p) -> u16
 {
     const spinlock l{m_txlock};
-    return m_socket.send_to(buffer(std::move(p.data)), {std::move(p.remote)});
+
+    boost::system::error_code e;
+    const auto res = m_socket.send_to(buffer(std::move(p.data)), {std::move(p.remote)}, 0, e);
+
+    return res;
 }
 
 auto socket_asio::get() -> std::optional<packet>
