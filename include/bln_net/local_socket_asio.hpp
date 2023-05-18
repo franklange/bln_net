@@ -35,6 +35,8 @@ public:
     auto wait() -> packet override;
     auto wait(const timeout&) -> std::optional<packet> override;
 
+    auto path() const -> std::string;
+
     auto measured_wait() -> packet;
     auto measured_wait(const timeout&) -> std::optional<packet>;
 

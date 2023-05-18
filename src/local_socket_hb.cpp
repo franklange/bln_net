@@ -50,6 +50,11 @@ auto socket_hb::wait(const timeout& t) -> std::optional<packet>
     return m_packets.wait(t);
 }
 
+auto socket_hb::path() const -> std::string
+{
+    return m_socket.path();
+}
+
 void socket_hb::recv()
 {
     auto p = m_socket.wait(m_quit);

@@ -60,6 +60,11 @@ auto socket_asio::wait(const timeout& t) -> std::optional<packet>
     return m_queue.wait(t);
 }
 
+auto socket_asio::path() const -> std::string
+{
+    return m_path.path();
+}
+
 auto socket_asio::measured_wait() -> packet
 {
     const auto s = clock::now();

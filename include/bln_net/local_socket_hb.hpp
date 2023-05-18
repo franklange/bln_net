@@ -7,6 +7,7 @@
 
 #include <atomic>
 #include <cstdint>
+#include <string>
 #include <thread>
 
 namespace bln_net::local {
@@ -27,6 +28,8 @@ public:
 
     auto wait() -> packet override;
     auto wait(const timeout&) -> std::optional<packet> override;
+
+    auto path() const -> std::string;
 
 private:
     void recv();
